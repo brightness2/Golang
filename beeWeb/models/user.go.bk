@@ -1,0 +1,105 @@
+/*
+ * @Author: Brightness
+ * @Date: 2021-10-11 08:49:39
+ * @LastEditors: Brightness
+ * @LastEditTime: 2021-10-12 08:53:44
+ * @Description:bee orm 的使用
+ */
+package models
+
+import (
+	"errors"
+	"fmt"
+
+	"github.com/beego/beego/v2/adapter/orm"
+)
+
+/*
+映射关系
+User -> user
+UserRole -> user_role
+*/
+type User struct {
+	Id   int
+	Name string
+
+	// Uname string `orm:"column(u_name)"` //字段映射
+	// CreateTime time.Time `orm:"auto_now_add;type(datetime)"`// 字段自动填写时间
+	// Status int 	`orm:"default(1)"` //字段默认值
+
+	// UserRole *UserRole `orm:"rel(one)"` //一对一，存在外键，外键字段在当前user表
+	// UserRole *UserRole `orm:"rel(one)"` //一对一，存在外键，外键字段在当前user表
+	// UserRole *UserRole `orm:"rel(fk)"` //正向一对多，有外键，外键在多的一方
+	// UserRole []*UserRole `orm:"reverse(many)"` //反向一对多
+
+	UserRoles []*UserRole `orm:"reverse(many)"` //反向一对多
+
+}
+
+type UserRole struct {
+	Id int
+	// User_id int //关联字段不用写
+	// Role_id int
+	User *User `orm:"rel(fk)"` //正向一对多，有外键，外键在多的一方
+}
+
+type Role struct {
+	Id   int
+	Name string
+}
+
+func init() {
+	// 需要在init中注册定义的model
+	// orm.RegisterModel(new(User), new(UserRole))
+}
+
+func ReadUser(id int) (User, error) {
+	// 默认使用 default，你可以指定为其他数据库
+	o := orm.NewOrm()
+	user := User{Id: id}
+	err := o.Read(&user)
+
+	if err == orm.ErrNoRows {
+		return User{}, errors.New("查询不到")
+	} else if err == orm.ErrMissPK {
+		return User{}, errors.New("找不到主键")
+	} else {
+		fmt.Println(user)
+		return user, nil
+	}
+}
+
+func ReadUserAll() ([]User, error) {
+	o := orm.NewOrm()
+	users := []User{}
+	_, err := o.QueryTable("user").All(&users)
+	return users, err
+}
+
+func CreateUser(user User) (bool, error) {
+	o := orm.NewOrm()
+	flag, _, _ := o.ReadOrCreate(&user, "Name")
+	if flag {
+		return true, nil
+	} else {
+		return false, errors.New(user.Name + "用户已存在")
+	}
+}
+
+func UpdateUser(user User) (int64, error) {
+	o := orm.NewOrm()
+	if o.Read(&User{Id: user.Id}) == nil {
+		fmt.Println(user)
+		if num, err := o.Update(&user); err == nil {
+			return num, err
+		}
+	}
+	return 0, nil
+}
+
+func DeleteUser(id int) (int64, error) {
+	o := orm.NewOrm()
+	num, err := o.Delete(&User{Id: id})
+	return num, err
+
+}

@@ -1,0 +1,39 @@
+/*
+ * @Author: Brightness
+ * @Date: 2021-10-11 15:20:52
+ * @LastEditors: Brightness
+ * @LastEditTime: 2021-10-12 08:51:20
+ * @Description: mysql 初始化
+ * 推荐使用 gorm
+ */
+package mysql
+
+// "fmt"
+
+// beego "github.com/beego/beego/v2/server/web"
+
+// "github.com/beego/beego/v2/adapter/orm"
+// _ "github.com/go-sql-driver/mysql"
+
+func Init() {
+
+}
+
+/*
+func BeegoInit() {
+	orm.Debug = beego.AppConfig.DefaultBool("db_debug", false) //开启调试
+	orm.RegisterDriver("mysql", orm.DRMySQL)
+	user, _ := beego.AppConfig.String("db_user")
+	pass, _ := beego.AppConfig.String("db_password")
+	host, _ := beego.AppConfig.String("db_host")
+	port, _ := beego.AppConfig.String("db_port")
+	database, _ := beego.AppConfig.String("db_database")
+	source := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", user, pass, host, port, database)
+	err := orm.RegisterDataBase("default", "mysql", source)
+	// err := orm.RegisterDataBase("default", "mysql", user+":"+pass+"@/"+database+"?charset=utf8")
+	// err := orm.RegisterDataBase("default", "mysql", "root:root@/demo?charset=utf8")
+	if err != nil {
+		fmt.Println("ORMERR", err)
+	}
+}
+*/
