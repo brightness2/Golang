@@ -1,0 +1,5 @@
+package ugorm
+
+func TestIndex() {
+
+}

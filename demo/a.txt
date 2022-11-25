@@ -1,0 +1,4 @@
+hello golang
+brightnes
+hello lang
+ok
